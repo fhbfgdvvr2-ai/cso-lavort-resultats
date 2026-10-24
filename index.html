@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Résultats en direct — CSO Domaine de Lavort</title>
+    <meta name="theme-color" content="#6b1b1b" />
+    <style>
+      :root { font-family: "Segoe UI", Inter, system-ui, sans-serif; }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: #f7f0ee; color: #2b1a1a; }
+      header { background: #6b1b1b; padding: 12px 14px; display: flex; align-items: center; gap: 12px; color: #fff; position: sticky; top: 0; z-index: 5; }
+      .logoChip { background: #ffffff; border-radius: 10px; padding: 3px 8px; flex: none; }
+      header h1 { margin: 0; font-size: 17px; }
+      header p { margin: 2px 0 0; font-size: 12px; color: #f2d7d7; }
+      .live { margin-left: auto; text-align: right; flex: none; }
+      .live .tag { font-size: 12px; font-weight: 800; letter-spacing: 1px; color: #ffd9d9; }
+      .live .tag.err { color: #fca5a5; }
+      .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #34d399; margin-right: 5px; animation: pulse 1.6s infinite; }
+      @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.25; } 100% { opacity: 1; } }
+      .live .upd { font-size: 11px; color: #f2d7d7; margin-top: 3px; }
+      main { max-width: 780px; margin: 0 auto; padding: 12px 10px 30px; }
+      .tabs { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 12px; -webkit-overflow-scrolling: touch; }
+      .chip { flex: none; border: 1.5px solid #7a2020; color: #7a2020; background: #fff; border-radius: 999px; padding: 7px 14px; font-size: 13px; font-weight: 700; cursor: pointer; }
+      .chip.on { background: #7a2020; color: #fff; }
+      .chip small { font-weight: 500; opacity: 0.8; }
+      .card { background: #fff; border-radius: 14px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(43, 26, 26, 0.08); }
+      .card h2 { margin: 0 0 8px; font-size: 14px; color: #7a2020; letter-spacing: 0.5px; text-transform: uppercase; }
+      .trackName { font-size: 19px; font-weight: 800; }
+      .trackHorse { font-size: 14px; color: #6b5454; margin-top: 2px; }
+      .trackTime { font-family: ui-monospace, Consolas, Menlo, monospace; font-size: 46px; font-weight: 800; color: #b34848; margin-top: 6px; font-variant-numeric: tabular-nums; line-height: 1.1; }
+      .trackPhase { font-size: 12px; color: #9a7a7a; margin-top: 2px; }
+      .podium { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+      .pod { border-radius: 12px; padding: 10px 6px; text-align: center; color: #fff; overflow: hidden; }
+      .pod .r { font-size: 16px; }
+      .pod .n { font-size: 13px; font-weight: 700; margin: 3px 0 1px; }
+      .pod .h { font-size: 11px; opacity: 0.9; }
+      .pod .t { font-family: ui-monospace, Consolas, Menlo, monospace; font-size: 14px; font-weight: 800; margin-top: 4px; }
+      .pod1 { background: #b08a2e; } .pod2 { background: #8c8c94; } .pod3 { background: #a0662c; }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #9a7a7a; padding: 6px 8px; border-bottom: 2px solid #f0e2e2; }
+      th.tR, td.tR { text-align: right; }
+      td { padding: 9px 8px; border-bottom: 1px solid #f4eaea; vertical-align: top; }
+      tr.me td { background: #fdf2ee; }
+      .mono { font-family: ui-monospace, Consolas, Menlo, monospace; font-variant-numeric: tabular-nums; font-weight: 700; }
+      .rk { font-weight: 800; color: #7a2020; }
+      .pts { font-weight: 700; white-space: nowrap; }
+      tr.nc td { color: #b09a9a; }
+      .det { font-size: 11px; color: #b09a9a; font-weight: 400; }
+      .empty { text-align: center; color: #8a6f6f; padding: 26px 10px; font-size: 14px; }
+      footer { text-align: center; font-size: 11px; color: #a98d8d; padding: 0 16px 26px; line-height: 1.7; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logoChip">
+        <svg width="120" height="43" viewBox="0 0 180 62" role="img" aria-label="Domaine de Lavort">
+          <circle cx="38" cy="10" r="5" fill="#000000"></circle>
+          <g stroke="#7a2020" stroke-width="6" stroke-linecap="round" fill="none">
+            <path d="M37 16 L30 32"></path>
+            <path d="M35 19 L51 12"></path>
+            <path d="M35 21 L19 25"></path>
+            <path d="M30 32 L48 40"></path>
+            <path d="M30 32 L12 44"></path>
+          </g>
+          <text x="60" y="58" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#000000">domaine de Lavort</text>
+        </svg>
+      </div>
+      <div>
+        <h1>Résultats en direct</h1>
+        <p>CSO Domaine de Lavort · Dimanche 25 octobre 2026</p>
+      </div>
+      <div class="live">
+        <span class="dot"></span><span class="tag" id="liveTag">EN DIRECT</span>
+        <div class="upd" id="updTxt">chargement…</div>
+      </div>
+    </header>
+    <main>
+      <nav class="tabs" id="tabs"></nav>
+      <div class="card" id="trackCard" style="display: none">
+        <h2 id="trackHead">En piste</h2>
+        <div class="trackName" id="trackName"></div>
+        <div class="trackHorse" id="trackHorse"></div>
+        <div class="trackTime" id="trackTime">00:00.00</div>
+        <div class="trackPhase" id="trackPhase"></div>
+      </div>
+      <div id="epInfo" class="det" style="margin: 0 6px 10px; font-size: 12px"></div>
+      <div class="podium" id="podium" style="display: none"></div>
+      <div class="card">
+        <h2 id="rankHead">Classement</h2>
+        <table>
+          <thead>
+            <tr><th>Rang</th><th>Cavalier</th><th class="tR">Temps</th><th class="tR">Pénalités</th></tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+        <div class="empty" id="empty">En attente des premiers résultats…</div>
+      </div>
+    </main>
+    <footer>
+      Site d'information — les résultats officiels sont affichés au secrétariat du concours.<br />
+      Domaine de Lavort · Concours n° 2729975 · 25 octobre 2026
+    </footer>
+    <script>
+      var OWNER = "fhbfgdvvr2-ai";
+      var REPO = "cso-lavort-resultats";
+      var BRANCH = "main";
+      var RAW_URL = "https://raw.githubusercontent.com/" + OWNER + "/" + REPO + "/" + BRANCH + "/results.json";
+      var FALLBACK_URL = "results.json";
+      var POLL_MS = 8000;
+      var LOCAL_EPREUVES = [
+        ["E1", "CSO Préparatoire 50 cm"], ["E2", "CSO Préparatoire 60 cm"], ["E3", "CSO Préparatoire 70 cm"], ["E4", "CSO Préparatoire 80 cm"],
+        ["E5", "CSO Préparatoire 90 cm"], ["E6", "CSO Préparatoire 1m00"], ["E7", "CSO Préparatoire 1m10"], ["E8", "CSO Poney 4 Grand Prix"],
+        ["E9", "CSO Club 4 Grand Prix 60 cm"], ["E10", "CSO Poney 3 Grand Prix 70 cm"],
+        ["E11", "CSO Club 3 Grand Prix 70 cm"], ["E12", "CSO Poney 2 Grand Prix 80 cm"],
+        ["E13", "CSO Club 2 Grand Prix 80 cm"], ["E14", "CSO Poney 1 Grand Prix 90 cm"],
+        ["E15", "CSO Club 1 Grand Prix 90 cm"], ["E16", "CSO Poney Elite Grand Prix"],
+        ["E17", "CSO Club Elite Grand Prix"], ["E18", "CSO Club E1 Grand Prix 110 cm"],
+        ["E19", "CSO Club E Elite Grand Prix 120 cm"]
+      ];
+      var data = null;
+      var fetchedAt = 0;
+      var curEp = null;
+
+      function pad(n) { return (n < 10 ? "0" : "") + n; }
+      function fmtTime(sec) {
+        if (sec === null || sec === undefined || isNaN(sec)) return "—";
+        var m = Math.floor(sec / 60), s = Math.floor(sec % 60), cs = Math.floor((sec * 100) % 100);
+        return pad(m) + ":" + pad(s) + "." + pad(cs);
+      }
+      function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+      function shortName(n) { return String(n).replace("CSO ", "").replace("Grand Prix", "GP"); }
+      function hhmmss(ts) { var d = new Date(ts); return pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds()); }
+
+      function fallbackData() {
+        return { epreuves: LOCAL_EPREUVES.map(function (e) { return { id: e[0], nom: e[1], total: null, classement: [] }; }) };
+      }
+      function fetchJson(url) {
+        return fetch(url + "?t=" + Date.now(), { cache: "no-store" })
+          .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+      }
+      function loadData() {
+        fetchJson(RAW_URL).then(apply).catch(function () {
+          fetchJson(FALLBACK_URL).then(apply).catch(function () {
+            if (!data) apply(fallbackData());
+            meta("connexion impossible — nouvelle tentative…", true);
+          });
+        });
+      }
+      function meta(txt, err) {
+        var t = document.getElementById("liveTag");
+        var u = document.getElementById("updTxt");
+        t.textContent = err ? "HORS LIGNE" : "EN DIRECT";
+        t.className = "tag" + (err ? " err" : "");
+        u.textContent = txt;
+      }
+      function apply(d) {
+        data = d;
+        fetchedAt = Date.now();
+        if (!curEp) {
+          if (d.current && d.current.epreuve) curEp = d.current.epreuve;
+          else {
+            var L = d.epreuves || [];
+            for (var i = L.length - 1; i >= 0; i--) { if (L[i].classement && L[i].classement.length) { curEp = L[i].id; break; } }
+          }
+          if (!curEp && (d.epreuves || []).length) curEp = d.epreuves[0].id;
+        }
+        renderTabs();
+        renderAll();
+        meta("mis à jour à " + hhmmss(fetchedAt));
+      }
+      function epNow() {
+        var L = (data && data.epreuves) || [];
+        for (var i = 0; i < L.length; i++) if (L[i].id === curEp) return L[i];
+        return null;
+      }
+      function renderTabs() {
+        var el = document.getElementById("tabs");
+        el.innerHTML = "";
+        ((data && data.epreuves) || []).forEach(function (ep) {
+          var b = document.createElement("button");
+          b.className = "chip" + (ep.id === curEp ? " on" : "");
+          var n = (ep.classement || []).length;
+          b.innerHTML = esc(shortName(ep.nom)) + (ep.total ? " <small>" + n + "/" + ep.total + "</small>" : "");
+          b.onclick = (function (id) { return function () { curEp = id; renderTabs(); renderAll(); }; })(ep.id);
+          el.appendChild(b);
+        });
+      }
+      function renderAll() {
+        var ep = epNow();
+        var c = data && data.current;
+        var tc = document.getElementById("trackCard");
+        if (c) {
+          tc.style.display = "block";
+          document.getElementById("trackHead").textContent = "En piste — " + shortName(c.epreuveNom || "");
+          document.getElementById("trackName").textContent = c.cavalier + (c.ordre && c.total ? "  (" + c.ordre + "/" + c.total + ")" : "");
+          document.getElementById("trackHorse").textContent = c.cheval ? "mont " + c.cheval : "";
+          updateLive();
+        } else { tc.style.display = "none"; }
+        var info = document.getElementById("epInfo");
+        if (ep && (ep.t1 || ep.t2)) {
+          var bits = [];
+          if (ep.deuxPhases) {
+            if (ep.t1) bits.push("Phase 1 : " + ep.t1 + " s");
+            if (ep.t2) bits.push("Phase 2 : " + ep.t2 + " s");
+            bits.push("1 pt de pénalité par tranche de 4 s entamée");
+          } else if (ep.t1) bits.push("Temps autorisé : " + ep.t1 + " s");
+          info.textContent = bits.join(" · ");
+          info.style.display = "block";
+        } else { info.style.display = "none"; }
+        var rows = ep ? (ep.classement || []) : [];
+        document.getElementById("rankHead").textContent = "Classement — " + (ep ? shortName(ep.nom) : "épreuve");
+        var pod = document.getElementById("podium");
+        var top3 = rows.filter(function (r) { return r.statut === "classé" && r.rang <= 3; });
+        if (top3.length) {
+          pod.style.display = "grid";
+          var cls = ["pod1", "pod2", "pod3"], medals = ["🥇", "🥈", "🥉"];
+          pod.innerHTML = top3.map(function (r, i) {
+            return "<div class='pod " + cls[i] + "'><div class='r'>" + medals[i] + "</div><div class='n'>" + esc(r.cavalier) +
+              "</div><div class='h'>" + esc(r.cheval) + "</div><div class='t'>" + fmtTime(r.temps) + "</div></div>";
+          }).join("");
+        } else { pod.style.display = "none"; }
+        var tb = document.getElementById("tbody");
+        tb.innerHTML = "";
+        var isHere = c && ep && c.epreuve === ep.id;
+        var inRows = false;
+        if (isHere) rows.forEach(function (r) { if (r.cavalier === c.cavalier && r.cheval === c.cheval) inRows = true; });
+        rows.forEach(function (r) {
+          var nc = r.statut !== "classé";
+          var det = "";
+          if (r.p1 !== null && r.p1 !== undefined && r.p2 !== null && r.p2 !== undefined)
+            det = "ph. 1 : " + fmtTime(r.p1) + " · ph. 2 : " + fmtTime(r.p2);
+          else if (r.parcours) det = "parcours " + fmtTime(r.parcours);
+          var tr = document.createElement("tr");
+          if (nc) tr.className = "nc";
+          tr.innerHTML =
+            "<td class='rk'>" + (nc ? "—" : r.rang) + "</td>" +
+            "<td><strong>" + esc(r.cavalier) + "</strong><div class='det'>" + esc(r.cheval) + "</div>" +
+            (det ? "<div class='det'>" + det + "</div>" : "") + "</td>" +
+            "<td class='mono tR'>" + (nc ? "—" : fmtTime(r.temps)) + "</td>" +
+            "<td class='tR'><span class='pts'>" + (nc ? (r.statut === "elim" ? "Élim." : "Aband.") : (r.pts + r.tpen) + " pts") + "</span>" +
+            (!nc && r.tpen ? "<div class='det'>dont " + r.tpen + " de temps</div>" : "") + "</td>";
+          tb.appendChild(tr);
+        });
+        if (isHere && !inRows) {
+          var trc = document.createElement("tr");
+          trc.className = "me";
+          trc.innerHTML =
+            "<td class='rk'>—</td><td><strong>" + esc(c.cavalier) + "</strong><div class='det'>" + esc(c.cheval || "") + "</div></td>" +
+            "<td class='mono tR'>" + (c.running ? "en piste" : "à venir") + "</td><td></td>";
+          tb.appendChild(trc);
+        }
+        var empty = document.getElementById("empty");
+        empty.style.display = tb.children.length ? "none" : "block";
+        empty.textContent = ep ? "En attente des résultats de cette épreuve…" : "Choisissez une épreuve ci-dessus.";
+      }
+      function updateLive() {
+        var c = data && data.current;
+        if (!c) return;
+        var el = document.getElementById("trackTime");
+        var ph = document.getElementById("trackPhase");
+        if (c.running && c.runningSec !== null && c.runningSec !== undefined) {
+          el.textContent = fmtTime(c.runningSec + (Date.now() - fetchedAt) / 1000);
+          ph.textContent = (c.phase ? c.phase + " · " : "") + "temps en direct";
+        } else {
+          el.textContent = (c.runningSec !== null && c.runningSec !== undefined) ? fmtTime(c.runningSec) : "—";
+          ph.textContent = c.runningSec ? "temps du passage" : "";
+        }
+      }
+      loadData();
+      setInterval(loadData, POLL_MS);
+      setInterval(updateLive, 250);
+      document.addEventListener("visibilitychange", function () { if (!document.hidden) loadData(); });
+    </script>
+  </body>
+</html>
