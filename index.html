@@ -23,6 +23,9 @@
       .tabs { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 12px; -webkit-overflow-scrolling: touch; }
       .chip { flex: none; border: 1.5px solid #7a2020; color: #7a2020; background: #fff; border-radius: 999px; padding: 7px 14px; font-size: 13px; font-weight: 700; cursor: pointer; }
       .chip.on { background: #7a2020; color: #fff; }
+      .chip.live { border-color: #dc2626; color: #b91c1c; }
+      .chip.live.on { background: #dc2626; border-color: #dc2626; color: #fff; }
+      .livedot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: currentColor; margin-right: 6px; animation: pulse 1.6s infinite; vertical-align: 1px; }
       .chip small { font-weight: 500; opacity: 0.8; }
       .card { background: #fff; border-radius: 14px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(43, 26, 26, 0.08); }
       .card h2 { margin: 0 0 8px; font-size: 14px; color: #7a2020; letter-spacing: 0.5px; text-transform: uppercase; }
@@ -241,11 +244,12 @@
       function renderTabs() {
         var el = document.getElementById("tabs");
         el.innerHTML = "";
+        var liveEp = data && data.current && data.current.epreuve;
         ((data && data.epreuves) || []).forEach(function (ep) {
           var b = document.createElement("button");
-          b.className = "chip" + (ep.id === curEp ? " on" : "");
+          b.className = "chip" + (ep.id === curEp ? " on" : "") + (ep.id === liveEp ? " live" : "");
           var n = (ep.classement || []).length;
-          b.innerHTML = esc(shortName(ep.nom)) + (ep.total ? " <small>" + n + "/" + ep.total + "</small>" : "");
+          b.innerHTML = (ep.id === liveEp ? "<span class='livedot'></span>" : "") + esc(shortName(ep.nom)) + (ep.total ? " <small>" + n + "/" + ep.total + "</small>" : "");
           b.onclick = (function (id) { return function () { curEp = id; renderTabs(); renderAll(); }; })(ep.id);
           el.appendChild(b);
         });
@@ -253,8 +257,9 @@
       function renderAll() {
         var ep = epNow();
         var c = data && data.current;
+        var isCur = !!(c && ep && c.epreuve === ep.id);
         var tc = document.getElementById("trackCard");
-        if (c) {
+        if (isCur) {
           tc.style.display = "block";
           document.getElementById("trackHead").textContent = "En piste — " + shortName(c.epreuveNom || "");
           document.getElementById("trackName").textContent = c.cavalier + (c.ordre && c.total ? "  (" + c.ordre + "/" + c.total + ")" : "");
@@ -281,7 +286,7 @@
           } else { info.style.display = "none"; }
         } else { info.style.display = "none"; }
         var rows = ep ? (ep.classement || []) : [];
-        document.getElementById("rankHead").textContent = "Classement — " + (ep ? shortName(ep.nom) : "épreuve");
+        document.getElementById("rankHead").textContent = "Classement — " + (ep ? shortName(ep.nom) : "épreuve") + (isCur ? " · en direct" : "");
         var pod = document.getElementById("podium");
         var top3 = (ep && ep.noTime) ? [] : rows.filter(function (r) { return r.statut === "classé" && r.rang <= 3; });
         if (top3.length) {
