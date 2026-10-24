@@ -4,12 +4,12 @@
     "date": "Dimanche 25 octobre 2026",
     "concours": "2729975"
   },
-  "updated": "2026-10-24T13:27:08.357Z",
+  "updated": "2026-10-24T13:35:35.891Z",
   "current": {
-    "epreuve": "E1",
-    "epreuveNom": "CSO Préparatoire 50 cm",
-    "cavalier": "HELYNA CAMPAGNIE",
-    "cheval": "KIRIELE DE LA CHENEE",
+    "epreuve": "E19",
+    "epreuveNom": "CSO Club E Elite Grand Prix 120 cm",
+    "cavalier": "CLOTHILDE AUCLAIR",
+    "cheval": "DESIREE DES BRUYERES",
     "ordre": 1,
     "total": 1,
     "running": false,
@@ -333,10 +333,10 @@
           "cheval": "LEMPTEGY DREAM KIBA"
         }
       ],
-      "ch2": true,
-      "deuxPhases": true,
-      "t1": 32,
-      "t2": 6,
+      "ch2": false,
+      "deuxPhases": false,
+      "t1": null,
+      "t2": null,
       "classement": []
     },
     {
@@ -350,10 +350,10 @@
           "cheval": "FROMENT"
         }
       ],
-      "ch2": true,
-      "deuxPhases": true,
-      "t1": 20,
-      "t2": 20,
+      "ch2": false,
+      "deuxPhases": false,
+      "t1": null,
+      "t2": null,
       "classement": []
     },
     {
@@ -372,10 +372,10 @@
           "cheval": "FEELING LAGESSE"
         }
       ],
-      "ch2": true,
-      "deuxPhases": true,
-      "t1": 30,
-      "t2": 10,
+      "ch2": false,
+      "deuxPhases": false,
+      "t1": null,
+      "t2": null,
       "classement": []
     },
     {
@@ -445,24 +445,11 @@
           "cheval": "DESIREE DES BRUYERES"
         }
       ],
-      "ch2": true,
-      "deuxPhases": true,
-      "t1": 45,
-      "t2": 25,
-      "classement": [
-        {
-          "rang": 1,
-          "cavalier": "CLOTHILDE AUCLAIR",
-          "cheval": "DESIREE DES BRUYERES",
-          "temps": 16.239999999990687,
-          "parcours": 56.44899999999325,
-          "p1": 40.20900000000256,
-          "p2": 16.239999999990687,
-          "pts": 0,
-          "tpen": 0,
-          "statut": "classé"
-        }
-      ]
+      "ch2": false,
+      "deuxPhases": false,
+      "t1": null,
+      "t2": null,
+      "classement": []
     }
   ]
 }
