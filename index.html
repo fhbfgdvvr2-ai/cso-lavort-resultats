@@ -96,6 +96,16 @@
         </table>
         <div class="empty" id="empty">En attente des premiers résultats…</div>
       </div>
+      <div class="card">
+        <h2 id="startHead">Ordre de départ</h2>
+        <table>
+          <thead>
+            <tr><th>Dossard</th><th>Cavalier</th><th>Monture</th><th class="tR">Statut</th></tr>
+          </thead>
+          <tbody id="startBody"></tbody>
+        </table>
+        <div class="empty" id="startEmpty">Aucun engagé dans cette épreuve.</div>
+      </div>
     </main>
     <footer>
       Site d'information — les résultats officiels sont affichés au secrétariat du concours.<br />
@@ -238,7 +248,7 @@
             "<td><strong>" + esc(r.cavalier) + "</strong><div class='det'>" + esc(r.cheval) + "</div>" +
             (det ? "<div class='det'>" + det + "</div>" : "") + "</td>" +
             "<td class='mono tR'>" + (nc ? "—" : fmtTime(r.temps)) + "</td>" +
-            "<td class='tR'><span class='pts'>" + (nc ? (r.statut === "elim" ? "Élim." : "Aband.") : (r.pts + r.tpen) + " pts") + "</span>" +
+            "<td class='tR'><span class='pts'>" + (nc ? (r.statut === "elim" ? "Élim." : r.statut === "np" ? "N.P." : "Aband.") : (r.pts + r.tpen) + " pts") + "</span>" +
             (!nc && r.tpen ? "<div class='det'>dont " + r.tpen + " de temps</div>" : "") + "</td>";
           tb.appendChild(tr);
         });
@@ -253,6 +263,30 @@
         var empty = document.getElementById("empty");
         empty.style.display = tb.children.length ? "none" : "block";
         empty.textContent = ep ? "En attente des résultats de cette épreuve…" : "Choisissez une épreuve ci-dessus.";
+        var sb = document.getElementById("startBody");
+        sb.innerHTML = "";
+        var eng = ep ? (ep.engages || []) : [];
+        var resByKey = {};
+        rows.forEach(function (r) { resByKey[r.cavalier + "|" + r.cheval] = r; });
+        eng.forEach(function (g, i) {
+          var isCur = c && ep && c.epreuve === ep.id && c.ordre === i + 1 && c.cavalier === g.cavalier;
+          var r = resByKey[g.cavalier + "|" + g.cheval];
+          var stat = "à venir";
+          if (r) stat = r.statut === "classé" ? fmtTime(r.temps) : (r.statut === "elim" ? "Élim." : r.statut === "np" ? "N.P." : "Aband.");
+          else if (isCur) stat = c.running ? "en piste" : "à venir";
+          var tr2 = document.createElement("tr");
+          if (isCur) tr2.className = "me";
+          tr2.innerHTML =
+            "<td class='rk'>" + esc(String(g.dossard || i + 1)) + "</td>" +
+            "<td><strong>" + esc(g.cavalier) + "</strong></td>" +
+            "<td><div class='det'>" + esc(g.cheval) + "</div></td>" +
+            "<td class='tR'><span class='pts'>" + esc(stat) + "</span></td>";
+          sb.appendChild(tr2);
+        });
+        var se = document.getElementById("startEmpty");
+        se.style.display = eng.length ? "none" : "block";
+        se.textContent = !ep ? "Choisissez une épreuve ci-dessus." : (ep.total ? "Engagés indisponibles — en attente d'une publication récente." : "Aucun engagé dans cette épreuve.");
+        document.getElementById("startHead").textContent = "Ordre de départ — " + (ep ? shortName(ep.nom) : "épreuve");
       }
       function updateLive() {
         var c = data && data.current;
