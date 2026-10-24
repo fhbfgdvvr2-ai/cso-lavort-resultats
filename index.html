@@ -42,6 +42,8 @@
       th.tR, td.tR { text-align: right; }
       td { padding: 9px 8px; border-bottom: 1px solid #f4eaea; vertical-align: top; }
       tr.me td { background: #fdf2ee; }
+      tr.clear td { background: #e8f6ec; }
+      tr.clear .rk { color: #178a4c; }
       .mono { font-family: ui-monospace, Consolas, Menlo, monospace; font-variant-numeric: tabular-nums; font-weight: 700; }
       .rk { font-weight: 800; color: #7a2020; }
       .pts { font-weight: 700; white-space: nowrap; }
@@ -260,20 +262,28 @@
           updateLive();
         } else { tc.style.display = "none"; }
         var info = document.getElementById("epInfo");
-        if (ep && (ep.t1 || ep.t2)) {
+        if (ep) {
           var bits = [];
-          if (ep.deuxPhases) {
+          if (ep.bareme) bits.push(ep.bareme);
+          if (ep.noTime) {
+            if (ep.t1) bits.push("Temps maximum : " + ep.t1 + " s");
+            if (ep.t1) bits.push("dépassement : 1 pt / tranche de 4 s entamée");
+            bits.push("temps non classant");
+            bits.push("parcours sans pénalité classés 1ers à égalité");
+          } else if (ep.deuxPhases) {
             if (ep.t1) bits.push("Phase 1 : " + ep.t1 + " s");
             if (ep.t2) bits.push("Phase 2 : " + ep.t2 + " s");
             bits.push("1 pt de pénalité par tranche de 4 s entamée");
           } else if (ep.t1) bits.push("Temps autorisé : " + ep.t1 + " s");
-          info.textContent = bits.join(" · ");
-          info.style.display = "block";
+          if (bits.length) {
+            info.textContent = bits.join(" · ");
+            info.style.display = "block";
+          } else { info.style.display = "none"; }
         } else { info.style.display = "none"; }
         var rows = ep ? (ep.classement || []) : [];
         document.getElementById("rankHead").textContent = "Classement — " + (ep ? shortName(ep.nom) : "épreuve");
         var pod = document.getElementById("podium");
-        var top3 = rows.filter(function (r) { return r.statut === "classé" && r.rang <= 3; });
+        var top3 = (ep && ep.noTime) ? [] : rows.filter(function (r) { return r.statut === "classé" && r.rang <= 3; });
         if (top3.length) {
           pod.style.display = "grid";
           var cls = ["pod1", "pod2", "pod3"], medals = ["🥇", "🥈", "🥉"];
@@ -294,13 +304,15 @@
             det = "ph. 1 : " + fmtTime(r.p1) + " · ph. 2 : " + fmtTime(r.p2);
           else if (r.parcours) det = "parcours " + fmtTime(r.parcours);
           var tr = document.createElement("tr");
-          if (nc) tr.className = "nc";
+          var clear0 = ep && ep.noTime && !nc && (r.pts + r.tpen) === 0;
+          if (nc) tr.className = "nc"; else if (clear0) tr.className = "clear";
           tr.innerHTML =
-            "<td class='rk'>" + (nc ? "—" : r.rang) + "</td>" +
+            "<td class='rk'>" + (nc ? "—" : (ep && ep.noTime ? (r.rang === 1 ? "1er" : r.rang) : r.rang)) + "</td>" +
             "<td><strong>" + esc(r.cavalier) + "</strong><div class='det'>" + esc(r.cheval) + "</div>" +
             (det ? "<div class='det'>" + det + "</div>" : "") + "</td>" +
             "<td class='mono tR'>" + (nc ? "—" : fmtTime(r.temps)) + "</td>" +
             "<td class='tR'><span class='pts'>" + (nc ? (r.statut === "elim" ? "Élim." : r.statut === "np" ? "N.P." : "Aband.") : (r.pts + r.tpen) + " pts") + "</span>" +
+            (clear0 ? "<div class='det' style='color:#178a4c;font-weight:700'>✔ sans pénalité</div>" : "") +
             (!nc && r.tpen ? "<div class='det'>dont " + r.tpen + " de temps</div>" : "") + "</td>";
           tb.appendChild(tr);
         });
