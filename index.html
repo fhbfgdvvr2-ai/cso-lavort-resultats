@@ -29,10 +29,6 @@
       .chip small { font-weight: 500; opacity: 0.8; }
       .card { background: #fff; border-radius: 14px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(43, 26, 26, 0.08); }
       .card h2 { margin: 0 0 8px; font-size: 14px; color: #7a2020; letter-spacing: 0.5px; text-transform: uppercase; }
-      .trackName { font-size: 19px; font-weight: 800; }
-      .trackHorse { font-size: 14px; color: #6b5454; margin-top: 2px; }
-      .trackTime { font-family: ui-monospace, Consolas, Menlo, monospace; font-size: 46px; font-weight: 800; color: #b34848; margin-top: 6px; font-variant-numeric: tabular-nums; line-height: 1.1; }
-      .trackPhase { font-size: 12px; color: #9a7a7a; margin-top: 2px; }
       .podium { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
       .pod { border-radius: 12px; padding: 10px 6px; text-align: center; color: #fff; overflow: hidden; }
       .pod .r { font-size: 16px; }
@@ -134,13 +130,6 @@
     </header>
     <main>
       <nav class="tabs" id="tabs"></nav>
-      <div class="card" id="trackCard" style="display: none">
-        <h2 id="trackHead">En piste</h2>
-        <div class="trackName" id="trackName"></div>
-        <div class="trackHorse" id="trackHorse"></div>
-        <div class="trackTime" id="trackTime">00:00.00</div>
-        <div class="trackPhase" id="trackPhase"></div>
-      </div>
       <div id="epInfo" class="det" style="margin: 0 6px 10px; font-size: 12px"></div>
       <div class="podium" id="podium" style="display: none"></div>
       <div class="card">
@@ -258,14 +247,6 @@
         var ep = epNow();
         var c = data && data.current;
         var isCur = !!(c && ep && c.epreuve === ep.id);
-        var tc = document.getElementById("trackCard");
-        if (isCur) {
-          tc.style.display = "block";
-          document.getElementById("trackHead").textContent = "En piste — " + shortName(c.epreuveNom || "");
-          document.getElementById("trackName").textContent = c.cavalier + (c.ordre && c.total ? "  (" + c.ordre + "/" + c.total + ")" : "");
-          document.getElementById("trackHorse").textContent = c.cheval ? "mont " + c.cheval : "";
-          updateLive();
-        } else { tc.style.display = "none"; }
         var info = document.getElementById("epInfo");
         if (ep) {
           var bits = [];
@@ -357,26 +338,8 @@
         se.textContent = !ep ? "Choisissez une épreuve ci-dessus." : (ep.total ? "Engagés indisponibles — en attente d'une publication récente." : "Aucun engagé dans cette épreuve.");
         document.getElementById("startHead").textContent = "Ordre de départ — " + (ep ? shortName(ep.nom) : "épreuve");
       }
-      function updateLive() {
-        var c = data && data.current;
-        if (!c) return;
-        var el = document.getElementById("trackTime");
-        var ph = document.getElementById("trackPhase");
-        if (c.running && c.runningSec !== null && c.runningSec !== undefined) {
-          var lt;
-          if (c.paused) lt = c.runningSec;
-          else if (c.startMs) lt = (Date.now() - c.startMs) / 1000;
-          else lt = c.runningSec + (Date.now() - fetchedAt) / 1000;
-          el.textContent = fmtTime(lt);
-          ph.textContent = (c.phase ? c.phase + " · " : "") + (c.paused ? "⏸ en pause" : "temps en direct");
-        } else {
-          el.textContent = (c.runningSec !== null && c.runningSec !== undefined) ? fmtTime(c.runningSec) : "—";
-          ph.textContent = c.runningSec ? "temps du passage" : "";
-        }
-      }
       loadData();
       setInterval(loadData, POLL_MS);
-      setInterval(updateLive, 250);
       document.addEventListener("visibilitychange", function () { if (!document.hidden) loadData(); });
     </script>
   </body>
