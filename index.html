@@ -363,8 +363,12 @@
         var el = document.getElementById("trackTime");
         var ph = document.getElementById("trackPhase");
         if (c.running && c.runningSec !== null && c.runningSec !== undefined) {
-          el.textContent = fmtTime(c.runningSec + (Date.now() - fetchedAt) / 1000);
-          ph.textContent = (c.phase ? c.phase + " · " : "") + "temps en direct";
+          var lt;
+          if (c.paused) lt = c.runningSec;
+          else if (c.startMs) lt = (Date.now() - c.startMs) / 1000;
+          else lt = c.runningSec + (Date.now() - fetchedAt) / 1000;
+          el.textContent = fmtTime(lt);
+          ph.textContent = (c.phase ? c.phase + " · " : "") + (c.paused ? "⏸ en pause" : "temps en direct");
         } else {
           el.textContent = (c.runningSec !== null && c.runningSec !== undefined) ? fmtTime(c.runningSec) : "—";
           ph.textContent = c.runningSec ? "temps du passage" : "";
