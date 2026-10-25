@@ -48,6 +48,14 @@
       .pts { font-weight: 700; white-space: nowrap; }
       tr.nc td { color: #b09a9a; }
       .det { font-size: 11px; color: #b09a9a; font-weight: 400; }
+      .plink { font-size: 11px; color: #7a2020; font-weight: 700; cursor: pointer; text-decoration: underline dotted; margin-top: 2px; }
+      tr.pd td { padding: 0 8px 10px; border-bottom: 1px solid #f4eaea; }
+      .pdbox { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 10px; background: #fdf3f0; border-left: 3px solid #e8c8c0; }
+      .pdc { display: inline-block; border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 700; background: #fff; border: 1.5px solid #d9a29a; color: #7a2020; }
+      .pdc-ref { background: #fff4e5; border-color: #f4b380; color: #b45309; }
+      .pdc-bar { background: #fdeaea; border-color: #f19999; color: #b91c1c; }
+      .pdc-ep { background: #26221f; border-color: #57534e; color: #fca5a5; }
+      .pdc-tp { background: #eaf1fd; border-color: #94b8f2; color: #1d4ed8; }
       .empty { text-align: center; color: #8a6f6f; padding: 26px 10px; font-size: 14px; }
       footer { text-align: center; font-size: 11px; color: #a98d8d; padding: 0 16px 26px; line-height: 1.7; }
     </style>
@@ -292,6 +300,8 @@
           var tr = document.createElement("tr");
           var clear0 = ep && ep.noTime && !nc && (r.pts + r.tpen) === 0;
           if (nc) tr.className = "nc"; else if (clear0) tr.className = "clear";
+          var pd = r.detail && r.detail.length ? r.detail : null;
+          if (pd) tr.style.cursor = "pointer";
           tr.innerHTML =
             "<td class='rk'>" + (nc ? "—" : (ep && ep.noTime ? (r.rang === 1 ? "1er" : r.rang) : r.rang)) + "</td>" +
             "<td class='mono'>" + (r.dossard ? esc(String(r.dossard)) : "—") + "</td>" +
@@ -300,8 +310,23 @@
             "<td class='mono tR'>" + (nc ? "—" : fmtTime(r.temps)) + "</td>" +
             "<td class='tR'><span class='pts'>" + (nc ? (r.statut === "elim" ? "Élim." : r.statut === "np" ? "N.P." : "Aband.") : (r.pts + r.tpen) + " pts") + "</span>" +
             (clear0 ? "<div class='det' style='color:#178a4c;font-weight:700'>✔ sans pénalité</div>" : "") +
-            (!nc && r.tpen ? "<div class='det'>dont " + r.tpen + " de temps</div>" : "") + "</td>";
+            (!nc && r.tpen ? "<div class='det'>dont " + r.tpen + " de temps</div>" : "") +
+            (pd ? "<div class='plink'>ⓘ détail des pénalités</div>" : "") + "</td>";
           tb.appendChild(tr);
+          if (pd) {
+            var trd = document.createElement("tr");
+            trd.className = "pd";
+            trd.style.display = "none";
+            trd.innerHTML = "<td colspan='5'><div class='pdbox'>" + pd.map(function (d) {
+              if (d.k === "refus") return "<span class='pdc pdc-ref'>🚫 Refus — obstacle " + esc(String(d.o)) + " (+4 pts)</span>";
+              if (d.k === "barre") return "<span class='pdc pdc-bar'>🧱 Barre — obstacle " + esc(String(d.o)) + " (+4 pts)</span>";
+              if (d.k === "ep") return "<span class='pdc pdc-ep'>❌ Erreur de parcours — obstacle " + esc(String(d.o)) + "</span>";
+              if (d.k === "temps") return "<span class='pdc pdc-tp'>⏱ Dépassement du temps autorisé (+" + d.p + " pts)</span>";
+              return "<span class='pdc'>➕ Autres pénalités (+" + d.p + " pts)</span>";
+            }).join("") + "</div></td>";
+            tr.onclick = function () { trd.style.display = trd.style.display === "none" ? "" : "none"; };
+            tb.appendChild(trd);
+          }
         });
         if (isHere && !inRows) {
           var trc = document.createElement("tr");
