@@ -136,7 +136,7 @@
         <h2 id="rankHead">Classement</h2>
         <table>
           <thead>
-            <tr><th>Rang</th><th>Cavalier</th><th class="tR">Temps</th><th class="tR">Pénalités</th></tr>
+            <tr><th>Rang</th><th>Dossard</th><th>Cavalier</th><th class="tR">Temps</th><th class="tR">Pénalités</th></tr>
           </thead>
           <tbody id="tbody"></tbody>
         </table>
@@ -294,6 +294,7 @@
           if (nc) tr.className = "nc"; else if (clear0) tr.className = "clear";
           tr.innerHTML =
             "<td class='rk'>" + (nc ? "—" : (ep && ep.noTime ? (r.rang === 1 ? "1er" : r.rang) : r.rang)) + "</td>" +
+            "<td class='mono'>" + (r.dossard ? esc(String(r.dossard)) : "—") + "</td>" +
             "<td><strong>" + esc(r.cavalier) + "</strong><div class='det'>" + esc(r.cheval) + "</div>" +
             (det ? "<div class='det'>" + det + "</div>" : "") + "</td>" +
             "<td class='mono tR'>" + (nc ? "—" : fmtTime(r.temps)) + "</td>" +
@@ -306,7 +307,7 @@
           var trc = document.createElement("tr");
           trc.className = "me";
           trc.innerHTML =
-            "<td class='rk'>—</td><td><strong>" + esc(c.cavalier) + "</strong><div class='det'>" + esc(c.cheval || "") + "</div></td>" +
+            "<td class='rk'>—</td><td class='mono'>" + esc(String(c.dossard || "—")) + "</td><td><strong>" + esc(c.cavalier) + "</strong><div class='det'>" + esc(c.cheval || "") + "</div></td>" +
             "<td class='mono tR'>" + (c.running ? "en piste" : "à venir") + "</td><td></td>";
           tb.appendChild(trc);
         }
